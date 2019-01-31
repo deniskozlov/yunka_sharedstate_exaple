@@ -18,9 +18,21 @@ public abstract class SharedStateComponent : MonoBehaviour
         //Получение компонента с общими событиями
         Events = GetComponent<SharedEvents>();
 
+        //Подписка на событие sharedstatechanged и обработка его в OnWriteSomeDataReceived
+        Events.Subscribe<SharedStateChangedEventData>("sharedstatechanged", OnSharedStateChangedEventReceived);
+
         //Для вызова в дочерних классах
         OnStart();
     }
+
+    //Обработчик события об изменении общего состояния
+    private void OnSharedStateChangedEventReceived(SharedStateChangedEventData eventData)
+    {
+        OnSharedStateChanged(eventData);
+    }
+
+    //Метод который будет обрабатывать изменения состояния в дочерних компонентах
+    protected abstract void OnSharedStateChanged(SharedStateChangedEventData newState);
 
     protected abstract void OnStart();
 

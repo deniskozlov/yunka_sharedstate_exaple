@@ -13,9 +13,9 @@ public class SharedEvents : MonoBehaviour
         if (!_subscribers.ContainsKey(eventName))
         {
             var listOfDelegates = new List<Delegate>();
-            listOfDelegates.Add(callback);
             _subscribers.Add(eventName, listOfDelegates);
         }
+        _subscribers[eventName].Add(callback);
     }
 
     //Отписывает от события с названием eventName

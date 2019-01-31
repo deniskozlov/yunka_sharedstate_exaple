@@ -6,9 +6,8 @@ public class FirstComponent : SharedStateComponent
 
     protected override void OnStart()
     {
-        //Подписка на событие writesomedata и обработка его в OnWriteSomeDataReceived
-        Events.Subscribe<WriteSomeDataEventData>("writesomedata", OnWriteSomeDataReceived);
     }
+
 
     private void OnWriteSomeDataReceived(WriteSomeDataEventData eventData)
     {
@@ -18,6 +17,11 @@ public class FirstComponent : SharedStateComponent
     protected override void OnUpdate()
     {
 
+    }
+
+    protected override void OnSharedStateChanged(SharedStateChangedEventData newState)
+    {
+        Debug.Log(string.Format("Состояние изменено, параметр: {0}, новое значение = {1}", newState.Field, newState.NewValue));
     }
 }
 
