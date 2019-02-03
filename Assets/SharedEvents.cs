@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SharedEvents : MonoBehaviour
@@ -39,6 +40,24 @@ public class SharedEvents : MonoBehaviour
             {
                 callback(data);
             }
+        }
+    }
+
+    //Оправка данных data подписчикам на событие eventName
+    public async Task PublishAsync<T>(string eventName, T data) where T : EventData
+    {
+        if (_subscribers.ContainsKey(eventName))
+        {
+            var listOfDelegates = _subscribers[eventName];
+
+            var tasks = new List<Task>();
+            
+            foreach (Action<T> callback in listOfDelegates)
+            {
+                tasks.Add(Task.Run(() => { callback(data); }));
+            }
+
+            await Task.WhenAll(tasks);
         }
     }
 }
